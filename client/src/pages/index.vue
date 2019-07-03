@@ -9,28 +9,29 @@
 
 <script lang="ts">
 import { ApiPromise, WsProvider } from "@polkadot/api";
-// import { Struct } from "@polkadot/types/codec";
-// import { getTypeRegistry, u32, Vector } from "@polkadot/types";
+import { Struct } from "@polkadot/types/codec";
+import { getTypeRegistry, u32, Vector } from "@polkadot/types";
 
-// export class VecU32 extends Vector.with(u32) {}
+class VecU32 extends Vector.with(u32) {}
 
-// export class Kind extends Struct {
-//   constructor(value) {
-//     super(
-//       {
-//         stuff: VecU32
-//       },
-//       value
-//     );
-//   }
-// }
+type KindType = {
+  stuff: VecU32;
+};
 
-// try {
-//   const typeRegistry = getTypeRegistry();
-//   typeRegistry.register({ Kind });
-// } catch (err) {
-//   console.error("Failed to register custom types", err);
-// }
+class Kind extends Struct {
+  constructor(value?: KindType) {
+    super(
+      {
+        stuff: VecU32
+      },
+      value
+    );
+  }
+
+  get stuff(): VecU32 {
+    return this.get("stuff") as VecU32;
+  }
+}
 
 const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
 
@@ -44,14 +45,18 @@ export default {
     async connect() {
       try {
         const provider = new WsProvider("ws://127.0.0.1:9944");
-        const api = await ApiPromise.create({
-          provider,
-          types: {
-            Kind: {
-              stuff: "Vec<u32>"
-            }
-          }
-        });
+
+        const typeRegistry = getTypeRegistry();
+        typeRegistry.register({ Kind });
+
+        const api = await ApiPromise.create(provider);
+
+        // With types providede in create - works
+        // {
+        //   Kind: {
+        //     stuff: "Vec<u32>"
+        //   }
+        // }
 
         console.log(api.query);
 
