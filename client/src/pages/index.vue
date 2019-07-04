@@ -63,7 +63,7 @@ export default {
         const now = await api.query.timestamp.now();
         console.log(now);
 
-        const res = await api.query.templateModule.kinds(Alice);
+        const res = await api.query.template.kinds(Alice);
         console.log(res);
       } catch (err) {
         console.error(err);
