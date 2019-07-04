@@ -14,8 +14,8 @@ class Kind extends Struct {
     );
   }
 
-  get stuff() {
-    return this.get("stuff");
+  get stuff(): VecU32 {
+    return this.get("stuff") as VecU32;
   }
 }
 

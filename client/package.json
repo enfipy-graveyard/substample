@@ -2,6 +2,7 @@
   "name": "substample",
   "version": "1.0.0",
   "description": "Project substample",
+  "license": "MIT",
   "author": "enfipy",
   "scripts": {
     "dev": "nuxt",
