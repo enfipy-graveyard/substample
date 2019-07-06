@@ -26,6 +26,7 @@ const connect = async () => {
     const provider = new WsProvider("ws://127.0.0.1:9944");
 
     const typeRegistry = getTypeRegistry();
+    debugger;
     typeRegistry.register({ Kind });
 
     const api = await ApiPromise.create(provider);

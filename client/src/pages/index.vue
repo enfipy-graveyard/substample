@@ -8,32 +8,7 @@
 </template>
 
 <script lang="ts">
-import { ApiPromise, WsProvider } from "@polkadot/api";
-import { Struct } from "@polkadot/types/codec";
-import { getTypeRegistry, u32, Vector } from "@polkadot/types";
-
-class VecU32 extends Vector.with(u32) {}
-
-type KindType = {
-  stuff: VecU32;
-};
-
-class Kind extends Struct {
-  constructor(value?: KindType) {
-    super(
-      {
-        stuff: VecU32
-      },
-      value
-    );
-  }
-
-  get stuff(): VecU32 {
-    return this.get("stuff") as VecU32;
-  }
-}
-
-const Alice = "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY";
+import connect from "./test";
 
 export default {
   data() {
@@ -43,31 +18,7 @@ export default {
   },
   methods: {
     async connect() {
-      try {
-        const provider = new WsProvider("ws://127.0.0.1:9944");
-
-        const typeRegistry = getTypeRegistry();
-        typeRegistry.register({ Kind });
-
-        const api = await ApiPromise.create(provider);
-
-        // With types providede in create - works
-        // {
-        //   Kind: {
-        //     stuff: "Vec<u32>"
-        //   }
-        // }
-
-        console.log(api.query);
-
-        const now = await api.query.timestamp.now();
-        console.log(now);
-
-        const res = await api.query.template.kinds(Alice);
-        console.log(res);
-      } catch (err) {
-        console.error(err);
-      }
+      await connect();
     }
   }
 };
